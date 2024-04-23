@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import { Admin } from "./components/Admin";
 
 interface Product {
   _id: string;
@@ -34,6 +35,9 @@ function App() {
 
   return (
     <>
+      <div>
+        <Admin />
+      </div>
       <h1>Frukt</h1>
       <ul className="product-list">
         {products.map((product) => (
