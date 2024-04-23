@@ -1,0 +1,25 @@
+GET http://localhost:3000/
+###
+GET http://localhost:3000/customers
+### 
+GET http://localhost:3000/orders
+###
+GET http://localhost:3000/orders-with-details
+
+
+
+###
+POST http://localhost:3000/create-product
+###
+POST http://localhost:3000/create-customer
+###
+POST http://localhost:3000/create-order
+
+
+
+###
+PUT http://localhost:3000/update-customer
+###
+PUT http://localhost:3000/update-product
+###
+PUT http://localhost:3000/update-order
