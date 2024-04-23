@@ -40,3 +40,29 @@
 .read-the-docs {
   color: #888;
 }
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex; /* Använd flexbox */
+  flex-wrap: wrap; /* Låt elementen wrap vid behov */
+  justify-content: center; /* Centrera elementen horisontellt */
+}
+
+li {
+  flex: 0 0 auto; /* Auto storlek för elementen */
+  margin: 0.5rem; /* Lite mellanrum mellan bilderna */
+}
+
+.product-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.product-wrapper {
+  text-align: center; /* Centrera innehållet horisontellt */
+}
+
+.product-info {
+  margin-top: 0.5rem; /* Lite mellanrum mellan bilden och texten */
+}
