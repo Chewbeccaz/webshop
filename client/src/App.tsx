@@ -1,35 +1,75 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  image: string;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [products, setProducts] = useState<Product[]>([]);
+  const [cart, setCart] = useState<Product[]>([]);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("/api/");
+      const data = await response.json();
+      setProducts(data);
+      console.log(data);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const addToCart = (product: Product) => {
+    setCart([...cart, product]);
+    console.log("Product added to cart:", product);
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Frukt</h1>
+      <ul className="product-list">
+        {products.map((product) => (
+          <li key={product._id}>
+            <div className="product-wrapper">
+              <img
+                src={product.image}
+                style={{ width: "200px" }}
+                alt={product.name}
+              />
+              <div className="product-info">
+                <p>
+                  {product.name} - {product.price} kr
+                </p>
+                <button onClick={() => addToCart(product)}>
+                  Lägg till i kundvagn
+                </button>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+      {cart.length > 0 && (
+        <div>
+          <h2>Kundvagn</h2>
+          <ul>
+            {cart.map((item: any, index: number) => (
+              <li key={index}>
+                {item.name} - {item.price} kr
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
