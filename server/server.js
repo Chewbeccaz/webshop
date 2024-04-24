@@ -1,9 +1,13 @@
 let express = require("express");
 let app = express();
+const url = "mongodb://localhost:27017/shop";
 const mongoose = require("mongoose");
 const Customers = require("./models/Customers");
 const Product = require("./models/Products");
 const Orders = require("./models/Orders");
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // hämtar produkter
 app.get("/", async (request, response) => {
@@ -81,29 +85,56 @@ app.get("/orders-with-details", async (req, res) => {
   }
 });
 
-// Lägger till produkter
-app.post("/create-product", async (request, response) => {
+// // Lägger till produkter
+// app.post("/create-product", async (request, response) => {
+//   try {
+//     await mongoose
+//       .connect("mongodb://localhost:27017/shop")
+//       .then(console.log("created product"));
+
+//     const product = new Product({
+//       name: "Watermelon",
+//       description: "watermelon sugar..",
+//       price: 79,
+//       image:
+//         "https://images.unsplash.com/photo-1595475207225-428b62bda831?q=80&w=1760&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+//       inStock: 30,
+//       status: "active",
+//     });
+
+//     product.save().then((result) => {
+//       response.send(result);
+//       mongoose.connection.close();
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+
+app.post("/create-product", async (req, res) => {
   try {
-    await mongoose
-      .connect("mongodb://localhost:27017/shop")
-      .then(console.log("created product"));
+    await mongoose.connect(url);
+
+    // Extract product data from the request body
+    const { name, description, price, image, inStock, status } = req.body;
 
     const product = new Product({
-      name: "Watermelon",
-      description: "watermelon sugar..",
-      price: 79,
-      image:
-        "https://images.unsplash.com/photo-1595475207225-428b62bda831?q=80&w=1760&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      inStock: 30,
-      status: "active",
+      name,
+      description,
+      price,
+      image,
+      inStock,
+      status,
     });
 
-    product.save().then((result) => {
-      response.send(result);
-      mongoose.connection.close();
-    });
+    // Save the product to the database
+    const result = await product.save();
+
+    res.send(result);
+    mongoose.connection.close();
   } catch (error) {
     console.log(error);
+    res.status(500).send("Error adding product");
   }
 });
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AddProduct } from "./AddProduct";
-import { Product } from "../models/Product";
+import { CreateProduct } from "../models/CreateProduct";
 
 export const Admin = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -9,9 +9,25 @@ export const Admin = () => {
     setShowAddModal(!showAddModal);
   };
 
-  const handleAddProduct = async (product: Product) => {
-    //Lägg till logiken för att lägga till produkter här.
-    console.log(product);
+  const handleAddProduct = async (product: CreateProduct) => {
+    try {
+      const response = await fetch("/api/create-product", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Product added:", data);
+      } else {
+        console.error("Failed to add product:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+    }
   };
 
   return (

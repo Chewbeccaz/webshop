@@ -2,16 +2,18 @@ import { useState } from "react";
 import { Modal } from "@mui/material";
 import { useCart } from "../context/CartContext";
 import { Product } from "../models/Product";
-import { FaRegTrashAlt } from "react-icons/fa";
+import { FaRegTrashAlt, FaShoppingCart } from "react-icons/fa";
 
 export const Cart = () => {
   const { cart, addToCart, removeFromCart, decreaseQuantity } = useCart();
   const [openCart, setOpenCart] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  //Släng in i en useEffect.
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.product.price, 0);
+    return cart.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    );
   };
 
   const handleIncrement = (productId: string) => {
@@ -47,7 +49,11 @@ export const Cart = () => {
   };
   return (
     <>
-      <button onClick={() => setOpenCart(!openCart)}>Toggle Cart</button>
+      <button
+        onClick={() => setOpenCart(!openCart)}
+        style={{ position: "fixed", top: "10px", right: "10px" }}>
+        <FaShoppingCart />
+      </button>
       <Modal
         open={openCart}
         onClose={handleCloseModal}
@@ -89,7 +95,7 @@ export const Cart = () => {
               <div key={item.product._id} style={{ marginBottom: "10px" }}>
                 <hr style={{ marginBottom: "20px" }} />
                 <img
-                  src={item.product.image[0]}
+                  src={item.product.image}
                   alt={item.product.name}
                   style={{ width: "100px", marginRight: "10px" }}
                 />
