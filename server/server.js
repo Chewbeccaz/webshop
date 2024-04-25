@@ -10,24 +10,12 @@ const Orders = require("./models/Orders");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//TESTA CORS ISTÄLLET?
-// app.use(
-//   cors({
-//       origin: process.env.PUBLIC_URL,
-//       credentials: true,
-//   })
-// );
-
 // hämtar produkter
 app.get("/", async (request, response) => {
   try {
-    await mongoose
-      .connect("mongodb://localhost:27017/shop")
-      .then(console.log("connected to database"));
-
     Product.find().then((result) => {
       response.send(result);
-      mongoose.connection.close();
+      console.log("get-anrop");
     });
   } catch (error) {
     console.log(error);
@@ -37,9 +25,6 @@ app.get("/", async (request, response) => {
 //AGGREGATION FÖR ALLA GET:
 app.get("/orders-with-details", async (req, res) => {
   try {
-    await mongoose
-      .connect("mongodb://localhost:27017/shop")
-      .then(console.log("connected to database"));
     const pipeline = [
       {
         $lookup: {
@@ -96,8 +81,6 @@ app.get("/orders-with-details", async (req, res) => {
 
 app.post("/create-product", async (req, res) => {
   try {
-    await mongoose.connect(url);
-
     // Extract product data from the request body
     const { name, description, price, image, inStock, status } = req.body;
 
@@ -114,7 +97,6 @@ app.post("/create-product", async (req, res) => {
     const result = await product.save();
 
     res.send(result);
-    mongoose.connection.close();
   } catch (error) {
     console.log(error);
     res.status(500).send("Error adding product");
@@ -123,8 +105,6 @@ app.post("/create-product", async (req, res) => {
 
 app.put("/update-product/:id", async (request, response) => {
   try {
-    await mongoose.connect(url);
-
     const { name, description, price, image, inStock, status } = request.body;
 
     const productId = request.params.id;
@@ -143,8 +123,7 @@ app.put("/update-product/:id", async (request, response) => {
     );
 
     response.send(updatedProduct);
-
-    mongoose.connection.close();
+    console.log("close");
   } catch (error) {
     console.log(error);
     response.status(500).send("Error updating product");
@@ -169,10 +148,6 @@ app.put("/update-product/:id", async (request, response) => {
 
 app.post("/create-order", async (request, response) => {
   try {
-    await mongoose
-      .connect("mongodb://localhost:27017/shop")
-      .then(console.log("connected to database"));
-
     const order = new Orders({
       _id: "678",
       customer: "test@testsson.test",
@@ -183,7 +158,6 @@ app.post("/create-order", async (request, response) => {
     });
     order.save().then((result) => {
       response.send(result);
-      mongoose.connection.close();
     });
   } catch (error) {
     console.log(error);
@@ -192,15 +166,10 @@ app.post("/create-order", async (request, response) => {
 
 app.put("/update-order", async (request, response) => {
   try {
-    await mongoose
-      .connect("mongodb://localhost:27017/shop")
-      .then(console.log("connected"));
-
     Orders.findByIdAndUpdate("678", {
       status: "paid",
     }).then((result) => {
       response.send(result);
-      mongoose.connection.close();
     });
   } catch (error) {
     console.log(error);
@@ -227,10 +196,6 @@ app.put("/update-order", async (request, response) => {
 // Lägger till användare
 app.post("/create-customer", async (request, response) => {
   try {
-    await mongoose
-      .connect("mongodb://localhost:27017/shop")
-      .then(console.log("connected to database"));
-
     const customer = new Customers({
       _id: "nurydberg@najssomfan.se",
       firstName: "Nur",
@@ -241,7 +206,6 @@ app.post("/create-customer", async (request, response) => {
 
     customer.save().then((result) => {
       response.send(result);
-      mongoose.connection.close();
     });
     clear;
   } catch (error) {
@@ -252,23 +216,21 @@ app.post("/create-customer", async (request, response) => {
 // Uppdaterar existerande användare
 app.put("/update-customer", async (request, response) => {
   try {
-    await mongoose
-      .connect("mongodb://localhost:27017/shop")
-      .then(console.log("connected to database"));
-
     Customers.findByIdAndUpdate("nurydberg@najssomfan.se", {
       firstName: "Emelie",
       lastName: "Granath",
       address: "Drottninggatan",
     }).then((result) => {
       response.send(result);
-      mongoose.connection.close();
     });
   } catch (error) {
     console.log(error);
   }
 });
 
-app.listen(3000, () => {
-  console.log("Server is running...");
+mongoose.connect(url).then(() => {
+  console.log("connected to database");
+  app.listen(3000, () => {
+    console.log("Server is running...");
+  });
 });
