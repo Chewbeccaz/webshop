@@ -4,10 +4,19 @@ const url = "mongodb://localhost:27017/shop";
 const mongoose = require("mongoose");
 const Customers = require("./models/Customers");
 const Product = require("./models/Products");
+
 const Orders = require("./models/Orders");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+//TESTA CORS ISTÄLLET?
+// app.use(
+//   cors({
+//       origin: process.env.PUBLIC_URL,
+//       credentials: true,
+//   })
+// );
 
 // hämtar produkter
 app.get("/", async (request, response) => {
@@ -85,32 +94,6 @@ app.get("/orders-with-details", async (req, res) => {
   }
 });
 
-// // Lägger till produkter
-// app.post("/create-product", async (request, response) => {
-//   try {
-//     await mongoose
-//       .connect("mongodb://localhost:27017/shop")
-//       .then(console.log("created product"));
-
-//     const product = new Product({
-//       name: "Watermelon",
-//       description: "watermelon sugar..",
-//       price: 79,
-//       image:
-//         "https://images.unsplash.com/photo-1595475207225-428b62bda831?q=80&w=1760&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-//       inStock: 30,
-//       status: "active",
-//     });
-
-//     product.save().then((result) => {
-//       response.send(result);
-//       mongoose.connection.close();
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
-
 app.post("/create-product", async (req, res) => {
   try {
     await mongoose.connect(url);
@@ -138,21 +121,33 @@ app.post("/create-product", async (req, res) => {
   }
 });
 
-// Uppdaterar existerande produkter
-app.put("/update-product", async (request, response) => {
+app.put("/update-product/:id", async (request, response) => {
   try {
-    await mongoose
-      .connect("mongodb://localhost:27017/shop")
-      .then(console.log("connected"));
+    await mongoose.connect(url);
 
-    Products.findByIdAndUpdate("321", {
-      description: "en rolig sak",
-    }).then((result) => {
-      response.send(result);
-      mongoose.connection.close();
-    });
+    const { name, description, price, image, inStock, status } = request.body;
+
+    const productId = request.params.id;
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      productId,
+      {
+        name,
+        description,
+        price,
+        image,
+        inStock,
+        status,
+      },
+      { new: true }
+    );
+
+    response.send(updatedProduct);
+
+    mongoose.connection.close();
   } catch (error) {
     console.log(error);
+    response.status(500).send("Error updating product");
   }
 });
 
