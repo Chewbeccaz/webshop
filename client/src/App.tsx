@@ -10,6 +10,20 @@ function App() {
 
   const { addToCart } = useCart();
 
+  // useEffect(() => {
+  //   fetchProducts();
+  // }, []);
+
+  // const fetchProducts = async () => {
+  //   try {
+  //     const response = await fetch("/api/");
+  //     const data = await response.json();
+  //     setProducts(data);
+  //   } catch (error) {
+  //     console.error("Error fetching products:", error);
+  //   }
+  // };
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -37,7 +51,7 @@ function App() {
             <div className="product-wrapper">
               <img
                 src={product.image}
-                style={{ width: "200px" }}
+                style={{ width: "290px", height: "300px" }}
                 alt={product.name}
               />
               <div className="product-info">
@@ -51,7 +65,6 @@ function App() {
         ))}
       </ul>
       <Cart />
-      <Admin />
     </>
   );
 }
