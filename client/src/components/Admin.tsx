@@ -3,6 +3,8 @@ import { AddProduct } from "./AddProduct";
 import { CreateProduct } from "../models/CreateProduct";
 import { Product } from "../models/Product";
 import { EditProduct } from "./EditProduct";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiEdit } from "react-icons/fi";
 
 export const Admin = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -85,6 +87,23 @@ export const Admin = () => {
     }
   };
 
+  const deleteProduct = async (productId: string) => {
+    try {
+      const response = await fetch(`/api/delete-product/${productId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        console.log("Product deleted:", productId);
+        fetchProducts();
+      } else {
+        console.error("Failed to delete product:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
   return (
     <>
       <h1>Admin</h1>
@@ -109,7 +128,10 @@ export const Admin = () => {
                   {product.name} - {product.price} SEK
                 </p>
                 <button onClick={() => handleOpenEditModal(product._id)}>
-                  Edit Product
+                  <FiEdit />
+                </button>
+                <button onClick={() => deleteProduct(product._id)}>
+                  <RiDeleteBin6Line />
                 </button>
                 {selectedProductId && (
                   <EditProduct
