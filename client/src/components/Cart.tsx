@@ -3,11 +3,13 @@ import { Modal } from "@mui/material";
 import { useCart } from "../context/CartContext";
 import { Product } from "../models/Product";
 import { FaRegTrashAlt, FaShoppingCart } from "react-icons/fa";
+import PaymentModal from "./PaymentModal";
 
 export const Cart = () => {
   const { cart, addToCart, removeFromCart, decreaseQuantity } = useCart();
   const [openCart, setOpenCart] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [openPaymentModal, setOpenPaymentModal] = useState(false);
 
   const calculateTotal = () => {
     return cart.reduce(
@@ -47,6 +49,29 @@ export const Cart = () => {
   const handleAddToCart = (product: Product) => {
     addToCart(product);
   };
+
+  //***********************  PAYMENT ************************ */
+
+  const handleOpenPaymentModal = () => {
+    setOpenPaymentModal(true);
+  };
+
+  const handleClosePaymentModal = () => {
+    setOpenPaymentModal(false);
+  };
+
+  const createOrder = (name: string, address: string) => {
+    // Your order creation logic here
+    console.log(
+      "Creating order with items:",
+      cart,
+      "Name:",
+      name,
+      "Address:",
+      address
+    );
+  };
+
   return (
     <>
       <button
@@ -161,7 +186,12 @@ export const Cart = () => {
             ))}
           </div>
           <h3>Total: {calculateTotal()} kr</h3>
-          <button>Gå till betalning</button>
+          <button onClick={handleOpenPaymentModal}>Gå till betalning</button>
+          <PaymentModal
+            open={openPaymentModal}
+            onClose={handleClosePaymentModal}
+            onPay={createOrder}
+          />
         </div>
       </Modal>
     </>
