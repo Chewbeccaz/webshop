@@ -10,6 +10,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Order } from "../models/Order";
+import { LinkedCustomer, LineItem } from "../models/Order";
 
 interface OrdersProps {
   open: boolean;
@@ -43,12 +44,29 @@ export const Orders: React.FC<OrdersProps> = ({ open, onClose }) => {
               <ListItemText
                 primary={`Order ID: ${order._id}`}
                 // secondary={`Status: ${order.status}`}
+                // secondary={
+                //   <>
+                //     <div>Status: {order.status}</div>
+                //     <div>Order Date: {order.orderDate}</div>
+                //     <div>Total Price: {order.totalPrice}</div>
+                //     <div>Payment ID: {order.paymentId || "N/A"}</div>
+                //   </>
+                // }
                 secondary={
                   <>
                     <div>Status: {order.status}</div>
                     <div>Order Date: {order.orderDate}</div>
                     <div>Total Price: {order.totalPrice}</div>
                     <div>Payment ID: {order.paymentId || "N/A"}</div>
+                    <div>Customer ID: {order.linkedCustomer._id}</div>
+                    <div>Products:</div>
+                    <ul>
+                      {order.lineItems.map((item) => (
+                        <li key={item._id}>
+                          {item.linkedProduct.name} - Quantity: {item.amount}
+                        </li>
+                      ))}
+                    </ul>
                   </>
                 }
               />
