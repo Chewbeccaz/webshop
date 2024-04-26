@@ -5,6 +5,7 @@ import { Product } from "../models/Product";
 import { EditProduct } from "./EditProduct";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
+import { Orders } from "./Orders";
 
 export const Admin = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -13,6 +14,7 @@ export const Admin = () => {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null
   );
+  const [showOrderModal, setShowOrderModal] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -30,6 +32,10 @@ export const Admin = () => {
 
   const handleToggleAddModal = () => {
     setShowAddModal(!showAddModal);
+  };
+
+  const handleToggleOrderModal = () => {
+    setShowOrderModal(!showOrderModal);
   };
 
   const handleOpenEditModal = (productId: string) => {
@@ -107,6 +113,8 @@ export const Admin = () => {
   return (
     <>
       <h1>Admin</h1>
+      <button onClick={handleToggleOrderModal}>View Orders</button>
+      <Orders open={showOrderModal} onClose={handleToggleOrderModal} />
       <button onClick={handleToggleAddModal}>Add new Product</button>
       <AddProduct
         open={showAddModal}
