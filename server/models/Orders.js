@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema(
   {
-    _id: {
-      type: String,
-      required: true,
-    },
+    // _id: {
+    //   type: String,
+    //   required: true,
+    // },
     customer: {
       type: String,
       required: true,

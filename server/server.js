@@ -158,21 +158,50 @@ app.delete("/delete-product/:id", async (request, response) => {
 //   }
 // });
 
-app.post("/create-order", async (request, response) => {
+// app.post("/create-order", async (request, response) => {
+//   try {
+//     const order = new Orders({
+//       _id: "678",
+//       customer: "test@testsson.test",
+//       orderDate: new Date(),
+//       status: "unpaid",
+//       totalPrice: 20,
+//       paymentId: "unpaid",
+//     });
+//     order.save().then((result) => {
+//       response.send(result);
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+
+//SKAPA ORDER:
+app.post("/create-order", async (req, res) => {
   try {
+    const { name, address, totalPrice, paymentId } = req.body;
+
+    if (!name || !address || !totalPrice || !paymentId) {
+      return res
+        .status(400)
+        .send("Name, address, totalPrice, and paymentId are required");
+    }
+
     const order = new Orders({
-      _id: "678",
-      customer: "test@testsson.test",
+      customer: name,
+      address,
       orderDate: new Date(),
-      status: "unpaid",
-      totalPrice: 20,
-      paymentId: "unpaid",
+      status: "paid",
+      totalPrice,
+      paymentId,
     });
-    order.save().then((result) => {
-      response.send(result);
-    });
+
+    const result = await order.save();
+
+    res.send(result);
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).send("Error creating order");
   }
 });
 
