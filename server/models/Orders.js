@@ -3,11 +3,19 @@ const Schema = mongoose.Schema;
 
 const orderSchema = new Schema(
   {
-    // _id: {
-    //   type: String,
-    //   required: true,
-    // },
+    _id: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
     customer: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    address: {
       type: String,
       required: true,
     },

@@ -33,7 +33,7 @@ export const Cart = () => {
   };
 
   const handleRemoveItem = (product: Product) => {
-    removeFromCart(product); // Call removeFromCart function from the context
+    removeFromCart(product);
   };
 
   const handleOpenModal = (product: Product) => {
@@ -60,20 +60,62 @@ export const Cart = () => {
     setOpenPaymentModal(false);
   };
 
-  const createOrder = async (name: string, address: string) => {
+  // const createOrder = async (name: string, address: string) => {
+  //   const items = cart.map((item) => ({
+  //     productId: item.product._id,
+  //     quantity: item.quantity,
+  //     price: item.product.price,
+  //   }));
+
+  //   console.log("This is your items:", items);
+
+  //   const totalPrice = items.reduce(
+  //     (total, item) => total + item.price * item.quantity,
+  //     0
+  //   );
+  //   console.log("This is your total price:", totalPrice);
+
+  //   const response = await fetch("/api/create-order", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       name,
+  //       address,
+  //       orderDate: new Date().toISOString(),
+  //       status: "Paid",
+  //       totalPrice: totalPrice,
+  //       paymentId: "random payment id",
+  //       items,
+  //     }),
+  //   });
+
+  //   console.log("This is your response:", response);
+
+  //   if (response.ok) {
+  //     const data = await response.json();
+  //     console.log("Order created: ", data);
+  //     //Tömma LS och cart här?
+  //     alert("Order created! This is your order ID: " + data._id);
+  //   } else {
+  //     console.error("Failed to create order: ", response.status);
+  //     const errorResponse = await response.json();
+  //     console.error("Error message: ", errorResponse.message);
+  //   }
+  // };
+
+  const createOrder = async (email: string, name: string, address: string) => {
     const items = cart.map((item) => ({
       productId: item.product._id,
       quantity: item.quantity,
       price: item.product.price,
     }));
 
-    console.log("This is your items:", items);
-
     const totalPrice = items.reduce(
       (total, item) => total + item.price * item.quantity,
       0
     );
-    console.log("This is your total price:", totalPrice);
 
     const response = await fetch("/api/create-order", {
       method: "POST",
@@ -81,12 +123,14 @@ export const Cart = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name,
-        address,
+        email: email,
+        name: name,
+        address: address,
         orderDate: new Date().toISOString(),
         status: "Paid",
         totalPrice: totalPrice,
-        paymentId: "random payment id",
+        paymentId: "random payment id", //ersätt med guid eller math.floor?
+        items: items,
       }),
     });
 

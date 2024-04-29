@@ -1,22 +1,27 @@
-export interface LinkedCustomer {
-  _id: string;
-}
+// export interface LinkedCustomer {
+//   _id: string;
+// }
+
+import { ReactNode } from "react";
 
 export interface LineItem {
+  amount: ReactNode;
   _id: string;
   linkedProduct: {
+    image: string | undefined;
     name: string;
   };
-  amount: number;
+  quantity: number;
 }
 
 export interface Order {
+  email: string;
   _id: string;
   customer: string | null;
+  address: string | null;
   orderDate: string;
   status: string;
   totalPrice: number;
   paymentId: string | null;
-  linkedCustomer: LinkedCustomer;
   lineItems: LineItem[];
 }
