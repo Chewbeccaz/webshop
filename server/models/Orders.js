@@ -7,6 +7,11 @@ const orderSchema = new Schema(
     //   type: String,
     //   required: true,
     // },
+
+    // _id: {
+    //   type: Schema.Types.ObjectId,
+    //   required: true,
+    // },
     customer: {
       type: String,
       required: true,

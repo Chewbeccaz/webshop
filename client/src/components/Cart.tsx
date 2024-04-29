@@ -87,6 +87,7 @@ export const Cart = () => {
         status: "Paid",
         totalPrice: totalPrice,
         paymentId: "random payment id",
+        items,
       }),
     });
 
