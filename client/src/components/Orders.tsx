@@ -10,7 +10,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Order } from "../models/Order";
-import { LinkedCustomer, LineItem } from "../models/Order";
+import { LineItem } from "../models/Order";
 
 interface OrdersProps {
   open: boolean;
@@ -23,7 +23,7 @@ export const Orders: React.FC<OrdersProps> = ({ open, onClose }) => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch("/api/orders-with-details");
+        const response = await fetch("/api/orders");
         const data: Order[] = await response.json();
         setOrders(data);
         console.log(orders);
@@ -43,22 +43,13 @@ export const Orders: React.FC<OrdersProps> = ({ open, onClose }) => {
             <ListItem key={order._id}>
               <ListItemText
                 primary={`Order ID: ${order._id}`}
-                // secondary={`Status: ${order.status}`}
-                // secondary={
-                //   <>
-                //     <div>Status: {order.status}</div>
-                //     <div>Order Date: {order.orderDate}</div>
-                //     <div>Total Price: {order.totalPrice}</div>
-                //     <div>Payment ID: {order.paymentId || "N/A"}</div>
-                //   </>
-                // }
                 secondary={
                   <>
                     <div>Status: {order.status}</div>
                     <div>Order Date: {order.orderDate}</div>
                     <div>Total Price: {order.totalPrice}</div>
                     <div>Payment ID: {order.paymentId || "N/A"}</div>
-                    <div>Customer ID: {order.linkedCustomer._id}</div>
+                    <div>Customer: {order.customer}</div>
                     <div>Products:</div>
                     <ul>
                       {order.lineItems.map((item) => (

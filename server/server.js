@@ -23,6 +23,63 @@ app.get("/", async (request, response) => {
   }
 });
 
+//GET ORDERS:
+
+app.get("/orders", async (req, res) => {
+  try {
+    const pipeline = [
+      {
+        $lookup: {
+          from: "lineitems",
+          localField: "_id",
+          foreignField: "orderId",
+          as: "lineItems",
+          pipeline: [
+            {
+              $lookup: {
+                from: "products",
+                localField: "productId",
+                foreignField: "_id",
+                as: "linkedProduct",
+              },
+            },
+            {
+              $addFields: {
+                linkedProduct: {
+                  $first: "$linkedProduct",
+                },
+              },
+            },
+          ],
+        },
+      },
+      {
+        $lookup: {
+          from: "customers",
+          localField: "customer",
+          foreignField: "_id",
+          as: "linkedCustomer",
+        },
+      },
+      {
+        $addFields: {
+          linkedCustomer: {
+            $first: "$linkedCustomer",
+          },
+          calculatedTotal: {
+            $sum: "$lineItems.totalPrice",
+          },
+        },
+      },
+    ];
+    const ordersWithDetails = await Orders.aggregate(pipeline);
+    res.json(ordersWithDetails);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 //AGGREGATION FÖR ALLA GET:
 app.get("/orders-with-details", async (req, res) => {
   try {
@@ -254,46 +311,74 @@ app.delete("/delete-product/:id", async (request, response) => {
 
 // server.js
 app.post("/create-order", async (req, res) => {
+  console.log("create-order", req.body);
+  const {
+    email,
+    name,
+    address,
+    orderDate,
+    status,
+    totalPrice,
+    paymentId,
+    products,
+  } = req.body;
+
+  // if (!email ||  !name || !address || !orderDate || !status ||  !totalPrice || !paymentId || !products) {
+  //   return res
+  //     .status(400)
+  //     .send("Name, address, totalPrice, paymentId, and items are required");
+
+  const order = new Orders({
+    _id: new mongoose.Types.ObjectId(),
+    customer: name,
+    email: email,
+    address: address,
+    orderDate: orderDate,
+    status: status,
+    totalPrice: totalPrice,
+    paymentId: paymentId,
+    products: products,
+  });
+
+  console.log("this is the order about to be saved", order);
+
   try {
-    const { name, address, totalPrice, paymentId, items } = req.body;
-
-    if (!name || !address || !totalPrice || !paymentId || !items) {
-      return res
-        .status(400)
-        .send("Name, address, totalPrice, paymentId, and items are required");
-    }
-
-    const order = new Orders({
-      _id: new mongoose.Types.ObjectId(),
-      customer: name,
-      address, //måste jag sätta adress till adress?
-      orderDate: new Date(),
-      status: "paid",
-      totalPrice,
-      paymentId,
-    });
-
     const savedOrder = await order.save();
-
-    // Assuming LineItems is a model for line items
-    for (const item of items) {
-      console.log(item);
-      const lineItems = new LineItems({
+    req.body.items.forEach(async (item) => {
+      new LineItems({
         orderId: savedOrder._id,
-        product: item.productId,
-        amount: item.quantity,
-        totalPrice: item.price * item.quantity,
-      });
-      console.log(lineItems);
-      await lineItems.save();
-    }
-
-    res.send(savedOrder);
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+      }).save();
+      console.log(item);
+    });
+    console.log("this is the saved order", savedOrder);
+    res.status(201).json(savedOrder);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error creating order");
+    res.status(500).json({ message: error.message });
   }
 });
+
+//     for (const item of items) {
+//       console.log(item);
+//       const lineItems = new LineItems({
+//         orderId: savedOrder._id,
+//         product: item.productId,
+//         amount: item.quantity,
+//         totalPrice: item.price * item.quantity,
+//       });
+//       console.log(lineItems);
+//       await lineItems.save();
+//     }
+
+//     res.send(savedOrder);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Error creating order");
+//   }
+// });
 
 app.put("/update-order", async (request, response) => {
   try {

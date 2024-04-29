@@ -5,7 +5,7 @@ import { Box, Modal } from "@mui/material";
 interface PaymentModalProps {
   open: boolean;
   onClose: () => void;
-  onPay: (name: string, address: string) => void;
+  onPay: (email: string, name: string, address: string) => void;
 }
 
 const PaymentModal: React.FC<PaymentModalProps> = ({
@@ -13,8 +13,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   onClose,
   onPay,
 }) => {
+  const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [nameError, setNameError] = useState("");
   const [addressError, setAddressError] = useState("");
 
@@ -34,6 +36,15 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   };
 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+    if (value.trim()) {
+      setEmailError("");
+    }
+  };
+
+  //SNYGGA TILL DENNA, snyggare if-satser + errormsg använda samma.
   const handlePay = () => {
     // Validate Namn
     if (!name.trim()) {
@@ -48,8 +59,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       setAddressError("");
     }
 
+    if (!email.trim()) {
+      setEmailError("Email is required.");
+    } else {
+      setEmailError("");
+    }
+
     if (name.trim() && address.trim()) {
-      onPay(name, address);
+      onPay(name, address, email);
     }
   };
 
@@ -88,9 +105,15 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         <h2>Payment Information</h2>
         <input
           type="text"
+          placeholder="Email"
+          value={email}
+          onChange={handleEmailChange}
+        />
+        {emailError && <p>{emailError}</p>}
+        <input
+          type="text"
           placeholder="Name"
           value={name}
-          //   onChange={(e) => setName(e.target.value)}
           onChange={handleNameChange}
         />
         {nameError && <p>{nameError}</p>}
@@ -103,7 +126,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         {addressError && <p>{addressError}</p>}
         <button
           onClick={handlePay}
-          disabled={nameError !== "" || addressError !== ""}>
+          disabled={
+            nameError !== "" || addressError !== "" || emailError !== ""
+          }>
           Pay
         </button>
       </div>
