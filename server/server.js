@@ -38,7 +38,7 @@ app.get("/orders", async (req, res) => {
             {
               $lookup: {
                 from: "products",
-                localField: "productId",
+                localField: "product",
                 foreignField: "_id",
                 as: "linkedProduct",
               },
@@ -81,106 +81,61 @@ app.get("/orders", async (req, res) => {
 });
 
 //AGGREGATION FÖR ALLA GET:
-app.get("/orders-with-details", async (req, res) => {
-  try {
-    const pipeline = [
-      {
-        $lookup: {
-          from: "lineItems",
-          localField: "orderId", //ändra till id
-          foreignField: "id",
-          as: "lineItems",
-          pipeline: [
-            {
-              $lookup: {
-                from: "products",
-                localField: "productId", //ändra till id
-                foreignField: "id",
-                as: "linkedProduct",
-              },
-            },
-            {
-              $addFields: {
-                linkedProduct: {
-                  $first: "$linkedProduct",
-                },
-              },
-            },
-          ],
-        },
-      },
-      {
-        $lookup: {
-          from: "customers",
-          localField: "customerId",
-          foreignField: "_Id",
-          as: "linkedCustomer",
-        },
-      },
-      {
-        $addFields: {
-          linkedCustomer: {
-            $first: "$linkedCustomer",
-          },
-          calculatedTotal: {
-            $sum: "$lineItems.totalPrice",
-          },
-        },
-      },
-    ];
-    // const pipeline = [
-    //   {
-    //     $lookup: {
-    //       from: "lineitems",
-    //       localField: "_id",
-    //       foreignField: "orderId",
-    //       as: "lineItems",
-    //       pipeline: [
-    //         {
-    //           $lookup: {
-    //             from: "products",
-    //             localField: "productId",
-    //             foreignField: "_id",
-    //             as: "linkedProduct",
-    //           },
-    //         },
-    //         {
-    //           $addFields: {
-    //             linkedProduct: {
-    //               $first: "$linkedProduct",
-    //             },
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   },
-    //   {
-    //     $lookup: {
-    //       from: "customers",
-    //       localField: "customer",
-    //       foreignField: "_id",
-    //       as: "linkedCustomer",
-    //     },
-    //   },
-    //   {
-    //     $addFields: {
-    //       linkedCustomer: {
-    //         $first: "$linkedCustomer",
-    //       },
-    //       calculatedTotal: {
-    //         $sum: "$lineItems.totalPrice",
-    //       },
-    //     },
-    //   },
-    // ];
+// app.get("/orders-with-details", async (req, res) => {
+//   try {
+//     const pipeline = [
+//       {
+//         $lookup: {
+//           from: "lineItems",
+//           localField: "orderId", //ändra till id
+//           foreignField: "id",
+//           as: "lineItems",
+//           pipeline: [
+//             {
+//               $lookup: {
+//                 from: "products",
+//                 localField: "productId", //ändra till id
+//                 foreignField: "id",
+//                 as: "linkedProduct",
+//               },
+//             },
+//             {
+//               $addFields: {
+//                 linkedProduct: {
+//                   $first: "$linkedProduct",
+//                 },
+//               },
+//             },
+//           ],
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "customers",
+//           localField: "customerId",
+//           foreignField: "_Id",
+//           as: "linkedCustomer",
+//         },
+//       },
+//       {
+//         $addFields: {
+//           linkedCustomer: {
+//             $first: "$linkedCustomer",
+//           },
+//           calculatedTotal: {
+//             $sum: "$lineItems.totalPrice",
+//           },
+//         },
+//       },
+//     ];
 
-    const ordersWithDetails = await Orders.aggregate(pipeline);
-    res.json(ordersWithDetails);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//     const ordersWithDetails = await Orders.aggregate(pipeline);
+//     res.json(ordersWithDetails);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 app.post("/create-product", async (req, res) => {
   try {
@@ -347,8 +302,8 @@ app.post("/create-order", async (req, res) => {
     req.body.items.forEach(async (item) => {
       new LineItems({
         orderId: savedOrder._id,
-        productId: item.productId,
-        quantity: item.quantity,
+        product: item.product,
+        amount: item.amount,
         price: item.price,
       }).save();
       console.log(item);

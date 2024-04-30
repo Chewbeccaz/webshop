@@ -107,13 +107,13 @@ export const Cart = () => {
 
   const createOrder = async (email: string, name: string, address: string) => {
     const items = cart.map((item) => ({
-      productId: item.product._id,
-      quantity: item.quantity,
+      product: item.product._id,
+      amount: item.quantity,
       price: item.product.price,
     }));
 
     const totalPrice = items.reduce(
-      (total, item) => total + item.price * item.quantity,
+      (total, item) => total + item.price * item.amount,
       0
     );
 

@@ -52,7 +52,7 @@ export const Orders: React.FC<OrdersProps> = ({ open, onClose }) => {
                     <div>Customer: {order.customer}</div>
                     <div>Products:</div>
                     <ul>
-                      {order.lineItems.map((item) => (
+                      {order.lineItems.map((item: LineItem) => (
                         <li key={item._id}>
                           {item.linkedProduct.name} - Quantity: {item.amount}
                         </li>
