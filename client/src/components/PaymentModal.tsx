@@ -66,7 +66,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
 
     if (name.trim() && address.trim()) {
-      onPay(name, address, email);
+      onPay(email, name, address);
     }
   };
 
@@ -105,25 +105,25 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         <h2>Payment Information</h2>
         <input
           type="text"
-          placeholder="Email"
-          value={email}
-          onChange={handleEmailChange}
-        />
-        {emailError && <p>{emailError}</p>}
-        <input
-          type="text"
           placeholder="Name"
           value={name}
           onChange={handleNameChange}
         />
-        {nameError && <p>{nameError}</p>}
+        {<div> {nameError && <p>{nameError}</p>}</div>}
         <input
           type="text"
           placeholder="Address"
           value={address}
           onChange={handleAddressChange}
         />
-        {addressError && <p>{addressError}</p>}
+        {<div> {addressError && <p>{addressError}</p>}</div>}
+        <input
+          type="text"
+          placeholder="Email"
+          value={email}
+          onChange={handleEmailChange}
+        />
+        {<div> {emailError && <p>{emailError}</p>}</div>}
         <button
           onClick={handlePay}
           disabled={
