@@ -1,0 +1,15 @@
+.confirmation-wrapper {
+  background-color: rgb(208, 239, 162);
+  padding: 100px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.home-btn {
+  background-color: rgb(237, 245, 226);
+  color: black;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid black;
+  margin-top: 20px;
+}

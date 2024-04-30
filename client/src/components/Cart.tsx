@@ -4,9 +4,11 @@ import { useCart } from "../context/CartContext";
 import { Product } from "../models/Product";
 import { FaRegTrashAlt, FaShoppingCart } from "react-icons/fa";
 import PaymentModal from "./PaymentModal";
+import { useNavigate } from "react-router-dom";
 
 export const Cart = () => {
   const { cart, addToCart, removeFromCart, decreaseQuantity } = useCart();
+  const navigate = useNavigate();
   const [openCart, setOpenCart] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
@@ -60,51 +62,6 @@ export const Cart = () => {
     setOpenPaymentModal(false);
   };
 
-  // const createOrder = async (name: string, address: string) => {
-  //   const items = cart.map((item) => ({
-  //     productId: item.product._id,
-  //     quantity: item.quantity,
-  //     price: item.product.price,
-  //   }));
-
-  //   console.log("This is your items:", items);
-
-  //   const totalPrice = items.reduce(
-  //     (total, item) => total + item.price * item.quantity,
-  //     0
-  //   );
-  //   console.log("This is your total price:", totalPrice);
-
-  //   const response = await fetch("/api/create-order", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       name,
-  //       address,
-  //       orderDate: new Date().toISOString(),
-  //       status: "Paid",
-  //       totalPrice: totalPrice,
-  //       paymentId: "random payment id",
-  //       items,
-  //     }),
-  //   });
-
-  //   console.log("This is your response:", response);
-
-  //   if (response.ok) {
-  //     const data = await response.json();
-  //     console.log("Order created: ", data);
-  //     //Tömma LS och cart här?
-  //     alert("Order created! This is your order ID: " + data._id);
-  //   } else {
-  //     console.error("Failed to create order: ", response.status);
-  //     const errorResponse = await response.json();
-  //     console.error("Error message: ", errorResponse.message);
-  //   }
-  // };
-
   const createOrder = async (email: string, name: string, address: string) => {
     const items = cart.map((item) => ({
       product: item.product._id,
@@ -140,7 +97,8 @@ export const Cart = () => {
       const data = await response.json();
       console.log("Order created: ", data);
       localStorage.removeItem("cart");
-      alert("Order created! This is your order ID: " + data._id); //Skicka till confirmation.
+      // alert("Order created! This is your order ID: " + data._id); //Skicka till confirmation.
+      navigate("/confirmation");
     } else {
       console.error("Failed to create order: ", response.status);
       const errorResponse = await response.json();
