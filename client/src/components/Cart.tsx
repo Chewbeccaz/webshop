@@ -4,9 +4,11 @@ import { useCart } from "../context/CartContext";
 import { Product } from "../models/Product";
 import { FaRegTrashAlt, FaShoppingCart } from "react-icons/fa";
 import PaymentModal from "./PaymentModal";
+import { useNavigate } from "react-router-dom";
 
 export const Cart = () => {
   const { cart, addToCart, removeFromCart, decreaseQuantity } = useCart();
+  const navigate = useNavigate();
   const [openCart, setOpenCart] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
@@ -17,6 +19,8 @@ export const Cart = () => {
       0
     );
   };
+
+  const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
 
   const handleIncrement = (productId: string) => {
     const product = cart.find((item) => item.product._id === productId);
@@ -36,18 +40,9 @@ export const Cart = () => {
     removeFromCart(product);
   };
 
-  const handleOpenModal = (product: Product) => {
-    setSelectedProduct(product);
-    setOpenCart(true);
-  };
-
   const handleCloseModal = () => {
     setOpenCart(false);
     setSelectedProduct(null);
-  };
-
-  const handleAddToCart = (product: Product) => {
-    addToCart(product);
   };
 
   //***********************  PAYMENT ************************ */
@@ -59,51 +54,6 @@ export const Cart = () => {
   const handleClosePaymentModal = () => {
     setOpenPaymentModal(false);
   };
-
-  // const createOrder = async (name: string, address: string) => {
-  //   const items = cart.map((item) => ({
-  //     productId: item.product._id,
-  //     quantity: item.quantity,
-  //     price: item.product.price,
-  //   }));
-
-  //   console.log("This is your items:", items);
-
-  //   const totalPrice = items.reduce(
-  //     (total, item) => total + item.price * item.quantity,
-  //     0
-  //   );
-  //   console.log("This is your total price:", totalPrice);
-
-  //   const response = await fetch("/api/create-order", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       name,
-  //       address,
-  //       orderDate: new Date().toISOString(),
-  //       status: "Paid",
-  //       totalPrice: totalPrice,
-  //       paymentId: "random payment id",
-  //       items,
-  //     }),
-  //   });
-
-  //   console.log("This is your response:", response);
-
-  //   if (response.ok) {
-  //     const data = await response.json();
-  //     console.log("Order created: ", data);
-  //     //Tömma LS och cart här?
-  //     alert("Order created! This is your order ID: " + data._id);
-  //   } else {
-  //     console.error("Failed to create order: ", response.status);
-  //     const errorResponse = await response.json();
-  //     console.error("Error message: ", errorResponse.message);
-  //   }
-  // };
 
   const createOrder = async (email: string, name: string, address: string) => {
     const items = cart.map((item) => ({
@@ -129,7 +79,7 @@ export const Cart = () => {
         orderDate: new Date().toISOString(),
         status: "Paid",
         totalPrice: totalPrice,
-        paymentId: "random payment id", //ersätt med guid eller math.floor?
+        paymentId: "random payment id",
         items: items,
       }),
     });
@@ -140,7 +90,7 @@ export const Cart = () => {
       const data = await response.json();
       console.log("Order created: ", data);
       localStorage.removeItem("cart");
-      alert("Order created! This is your order ID: " + data._id); //Skicka till confirmation.
+      navigate("/confirmation");
     } else {
       console.error("Failed to create order: ", response.status);
       const errorResponse = await response.json();
@@ -152,8 +102,33 @@ export const Cart = () => {
     <>
       <button
         onClick={() => setOpenCart(!openCart)}
-        style={{ position: "fixed", top: "10px", right: "10px" }}>
-        <FaShoppingCart />
+        style={{
+          position: "fixed",
+          top: "20px",
+          right: "20px",
+          display: "flex",
+          alignItems: "center",
+          background: "rgb(238, 245, 227)",
+          fontSize: "16px",
+        }}>
+        <div style={{ position: "relative" }}>
+          <FaShoppingCart />
+          {totalQuantity > 0 && (
+            <span
+              style={{
+                position: "absolute",
+                top: "-20px",
+                right: "-30px",
+                backgroundColor: "red",
+                color: "white",
+                borderRadius: "50%",
+                padding: "5px 10px",
+                fontSize: "12px",
+              }}>
+              {totalQuantity}
+            </span>
+          )}
+        </div>
       </button>
       <Modal
         open={openCart}
@@ -189,7 +164,7 @@ export const Cart = () => {
             }}>
             X
           </button>
-          <h2 style={{ color: "purple" }}>Kundvagn:</h2>
+          <h2 style={{ color: "rgb(148, 199, 214)" }}>Kundvagn:</h2>
           <h3>Artiklar:</h3>
           <div style={{ marginBottom: "20px" }}>
             {cart.map((item) => (

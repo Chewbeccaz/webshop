@@ -1,5 +1,5 @@
 export interface CreateProduct {
-  id?: string; // funkar det om man gör den optional?
+  id?: string;
   name: string;
   image: string;
   inStock: number;

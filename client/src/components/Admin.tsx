@@ -6,6 +6,8 @@ import { EditProduct } from "./EditProduct";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
 import { Orders } from "./Orders";
+import "../styles/admin.css";
+import { IoKeyOutline } from "react-icons/io5";
 
 export const Admin = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -112,10 +114,16 @@ export const Admin = () => {
 
   return (
     <>
-      <h1>Admin</h1>
-      <button onClick={handleToggleOrderModal}>View Orders</button>
+      <h1>
+        Admin <IoKeyOutline />
+      </h1>
+      <button className="admin-btn" onClick={handleToggleOrderModal}>
+        View Orders
+      </button>
       <Orders open={showOrderModal} onClose={handleToggleOrderModal} />
-      <button onClick={handleToggleAddModal}>Add new Product</button>
+      <button className="admin-btn" onClick={handleToggleAddModal}>
+        Add new Product
+      </button>
       <AddProduct
         open={showAddModal}
         onClose={handleToggleAddModal}

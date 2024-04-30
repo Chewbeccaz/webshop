@@ -7,17 +7,6 @@ import {
 } from "react";
 import { Product } from "../models/Product";
 
-//   export interface IProduct {
-//     id: string;
-//     name: string;
-//     price: number;
-//     description: string;
-//     images: string[];
-//     default_price: {
-//       unit_amount: number;
-//     };
-//   }
-
 interface ICartItem {
   product: Product;
   quantity: number;

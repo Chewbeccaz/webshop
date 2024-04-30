@@ -1,8 +1,20 @@
+import { useNavigate } from "react-router-dom";
+import "../styles/confirmation.css";
+
 export const Confirmation = () => {
+  const navigate = useNavigate();
+
+  const homeRedirect = () => {
+    navigate("/");
+  };
+
   return (
-    <div>
-      <h1>Order Confirmation</h1>
-      <p>Your order has been confirmed.</p>
+    <div className="confirmation-wrapper">
+      <h1>Thank you for your order!</h1>
+      <p>Please enjoy your fruitsallad!</p>
+      <button className="home-btn" onClick={homeRedirect}>
+        Go back to Homepage
+      </button>
     </div>
   );
 };

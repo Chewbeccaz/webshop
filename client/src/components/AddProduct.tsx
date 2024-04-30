@@ -21,7 +21,6 @@ export const AddProduct: React.FC<AddProductProps> = ({
   onAddProduct,
 }) => {
   const [product, setProduct] = useState({
-    // _id: "",
     name: "",
     description: "",
     price: 0,
@@ -38,7 +37,6 @@ export const AddProduct: React.FC<AddProductProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddProduct(product);
     onClose();
   };
 

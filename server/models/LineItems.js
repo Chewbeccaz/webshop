@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const lineItemsSchema = new Schema({
   orderId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Orders", //eller Order?
+    ref: "Orders",
     required: true,
   },
   product: {
