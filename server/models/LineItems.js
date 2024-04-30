@@ -7,12 +7,12 @@ const lineItemsSchema = new Schema({
     ref: "Orders", //eller Order?
     required: true,
   },
-  productId: {
+  product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
     required: true,
   },
-  quantity: {
+  amount: {
     type: Number,
     required: true,
   },
@@ -22,6 +22,5 @@ const lineItemsSchema = new Schema({
   },
 });
 
-// Explicitly set the collection name to 'lineItems'
-const LineItem = mongoose.model("LineItems", lineItemsSchema, "lineItems");
+const LineItem = mongoose.model("lineitems", lineItemsSchema);
 module.exports = LineItem;
