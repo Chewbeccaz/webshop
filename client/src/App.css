@@ -1,8 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap");
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: #d2e7b9;
 }
 
 .logo {
@@ -41,28 +44,62 @@
   color: #888;
 }
 
+h1 {
+  font-family: "Abril Fatface", cursive;
+  font-size: 3.5em;
+  margin: 1em 0;
+}
+
+p {
+  font-family: "Abril Fatface", cursive;
+  font-size: 1em;
+}
+
+.addtocart-btn {
+  background-color: #d2e7b9;
+  color: rgba(0, 0, 0, 0.802);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 12px;
+}
+
+.addtocart-btn svg {
+  font-size: 1.6em;
+}
+
+.addtocart-btn:hover {
+  background-color: #b5d290;
+}
+
 ul {
   list-style-type: none;
   padding: 0;
-  display: flex; /* Använd flexbox */
-  flex-wrap: wrap; /* Låt elementen wrap vid behov */
-  justify-content: center; /* Centrera elementen horisontellt */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 li {
-  flex: 0 0 auto; /* Auto storlek för elementen */
-  margin: 0.5rem; /* Lite mellanrum mellan bilderna */
+  flex: 0 0 auto;
+  margin: 0.6rem;
 }
 
 .product-list {
   list-style-type: none;
-  padding: 0;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
 }
 
 .product-wrapper {
-  text-align: center; /* Centrera innehållet horisontellt */
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .product-info {
-  margin-top: 0.5rem; /* Lite mellanrum mellan bilden och texten */
+  margin-top: 0.5rem;
 }

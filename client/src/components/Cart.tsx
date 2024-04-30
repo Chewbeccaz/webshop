@@ -20,6 +20,8 @@ export const Cart = () => {
     );
   };
 
+  const totalQuantity = cart.reduce((total, item) => total + item.quantity, 0);
+
   const handleIncrement = (productId: string) => {
     const product = cart.find((item) => item.product._id === productId);
     if (product) {
@@ -108,10 +110,40 @@ export const Cart = () => {
 
   return (
     <>
-      <button
+      {/* <button
         onClick={() => setOpenCart(!openCart)}
         style={{ position: "fixed", top: "10px", right: "10px" }}>
         <FaShoppingCart />
+      </button> */}
+      <button
+        onClick={() => setOpenCart(!openCart)}
+        style={{
+          position: "fixed",
+          top: "20px",
+          right: "20px",
+          display: "flex",
+          alignItems: "center",
+          background: "rgb(238, 245, 227)",
+          fontSize: "16px",
+        }}>
+        <div style={{ position: "relative" }}>
+          <FaShoppingCart />
+          {totalQuantity > 0 && (
+            <span
+              style={{
+                position: "absolute",
+                top: "-20px",
+                right: "-30px",
+                backgroundColor: "red",
+                color: "white",
+                borderRadius: "50%",
+                padding: "5px 10px",
+                fontSize: "12px",
+              }}>
+              {totalQuantity}
+            </span>
+          )}
+        </div>
       </button>
       <Modal
         open={openCart}
@@ -147,7 +179,7 @@ export const Cart = () => {
             }}>
             X
           </button>
-          <h2 style={{ color: "purple" }}>Kundvagn:</h2>
+          <h2 style={{ color: "rgb(148, 199, 214)" }}>Kundvagn:</h2>
           <h3>Artiklar:</h3>
           <div style={{ marginBottom: "20px" }}>
             {cart.map((item) => (

@@ -4,6 +4,8 @@ import { Cart } from "./components/Cart";
 import { Admin } from "./components/Admin";
 import { Product } from "./models/Product";
 import { useCart } from "./context/CartContext";
+import { FaCartPlus } from "react-icons/fa";
+import { GiFruitBowl } from "react-icons/gi";
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -44,7 +46,9 @@ function App() {
 
   return (
     <>
-      <h1>Fruktsallad</h1>
+      <h1>
+        Fruktsallad <GiFruitBowl />
+      </h1>
       <ul className="product-list">
         {products.map((product) => (
           <li key={product._id}>
@@ -58,7 +62,11 @@ function App() {
                 <p>
                   {product.name} - {product.price} SEK
                 </p>
-                <button onClick={() => addToCart(product)}>Add to Cart</button>
+                <button
+                  className="addtocart-btn"
+                  onClick={() => addToCart(product)}>
+                  <FaCartPlus />
+                </button>
               </div>
             </div>
           </li>
