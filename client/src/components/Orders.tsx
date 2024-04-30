@@ -32,6 +32,9 @@ export const Orders: React.FC<OrdersProps> = ({ open, onClose }) => {
       }
     };
     fetchOrders();
+
+    const intervalId = setInterval(fetchOrders, 5000);
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -51,13 +54,19 @@ export const Orders: React.FC<OrdersProps> = ({ open, onClose }) => {
                     <div>Payment ID: {order.paymentId || "N/A"}</div>
                     <div>Customer: {order.customer}</div>
                     <div>Products:</div>
-                    <ul>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "auto",
+                      }}>
                       {order.lineItems.map((item: LineItem) => (
-                        <li key={item._id}>
-                          {item.linkedProduct.name} - Quantity: {item.amount}
-                        </li>
+                        <div key={item._id}>
+                          <p>
+                            {item.linkedProduct.name} - Quantity: {item.amount}
+                          </p>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </>
                 }
               />
