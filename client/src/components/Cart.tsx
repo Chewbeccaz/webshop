@@ -139,8 +139,8 @@ export const Cart = () => {
     if (response.ok) {
       const data = await response.json();
       console.log("Order created: ", data);
-      //Tömma LS och cart här?
-      alert("Order created! This is your order ID: " + data._id);
+      localStorage.removeItem("cart");
+      alert("Order created! This is your order ID: " + data._id); //Skicka till confirmation.
     } else {
       console.error("Failed to create order: ", response.status);
       const errorResponse = await response.json();
