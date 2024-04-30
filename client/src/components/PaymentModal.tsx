@@ -44,28 +44,14 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
   };
 
-  //SNYGGA TILL DENNA, snyggare if-satser + errormsg använda samma.
   const handlePay = () => {
-    // Validate Namn
-    if (!name.trim()) {
-      setNameError("Name is required.");
-    } else {
-      setNameError("");
-    }
+    // Reset errors
+    setNameError(!name.trim() ? "Name is required." : "");
+    setAddressError(!address.trim() ? "Address is required." : "");
+    setEmailError(!email.trim() ? "Email is required." : "");
 
-    if (!address.trim()) {
-      setAddressError("Address is required.");
-    } else {
-      setAddressError("");
-    }
-
-    if (!email.trim()) {
-      setEmailError("Email is required.");
-    } else {
-      setEmailError("");
-    }
-
-    if (name.trim() && address.trim()) {
+    // Check if all fields are filled
+    if (name.trim() && address.trim() && email.trim()) {
       onPay(email, name, address);
     }
   };

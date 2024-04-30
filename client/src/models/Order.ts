@@ -1,7 +1,3 @@
-// export interface LinkedCustomer {
-//   _id: string;
-// }
-
 import { ReactNode } from "react";
 
 export interface LineItem {

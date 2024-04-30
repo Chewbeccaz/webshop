@@ -34,7 +34,7 @@ export const EditProduct: React.FC<EditProductProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onEditProduct(productId, localProduct); // Use localProduct for submission
+    onEditProduct(productId, localProduct);
     onClose();
   };
 

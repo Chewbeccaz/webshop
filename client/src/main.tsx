@@ -8,7 +8,6 @@ import { Router } from "./Router.tsx";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <CartProvider>
-      {/* <App /> */}
       <RouterProvider router={Router}></RouterProvider>
     </CartProvider>
   </React.StrictMode>

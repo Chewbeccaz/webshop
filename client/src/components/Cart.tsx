@@ -40,18 +40,9 @@ export const Cart = () => {
     removeFromCart(product);
   };
 
-  const handleOpenModal = (product: Product) => {
-    setSelectedProduct(product);
-    setOpenCart(true);
-  };
-
   const handleCloseModal = () => {
     setOpenCart(false);
     setSelectedProduct(null);
-  };
-
-  const handleAddToCart = (product: Product) => {
-    addToCart(product);
   };
 
   //***********************  PAYMENT ************************ */
@@ -88,7 +79,7 @@ export const Cart = () => {
         orderDate: new Date().toISOString(),
         status: "Paid",
         totalPrice: totalPrice,
-        paymentId: "random payment id", //ersätt med guid eller math.floor?
+        paymentId: "random payment id",
         items: items,
       }),
     });
@@ -99,7 +90,6 @@ export const Cart = () => {
       const data = await response.json();
       console.log("Order created: ", data);
       localStorage.removeItem("cart");
-      // alert("Order created! This is your order ID: " + data._id); //Skicka till confirmation.
       navigate("/confirmation");
     } else {
       console.error("Failed to create order: ", response.status);
@@ -110,11 +100,6 @@ export const Cart = () => {
 
   return (
     <>
-      {/* <button
-        onClick={() => setOpenCart(!openCart)}
-        style={{ position: "fixed", top: "10px", right: "10px" }}>
-        <FaShoppingCart />
-      </button> */}
       <button
         onClick={() => setOpenCart(!openCart)}
         style={{
