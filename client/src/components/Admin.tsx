@@ -20,7 +20,7 @@ export const Admin = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [products]);
 
   const fetchProducts = async () => {
     try {
@@ -63,6 +63,7 @@ export const Admin = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Product added:", data);
+        fetchProducts();
       } else {
         console.error("Failed to add product:", response.statusText);
       }
@@ -87,6 +88,7 @@ export const Admin = () => {
       if (response.ok) {
         const data = await response.json();
         console.log("Product updated:", data);
+        fetchProducts();
       } else {
         console.error("Failed to update product:", response.statusText);
       }

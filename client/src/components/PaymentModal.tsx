@@ -45,12 +45,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   };
 
   const handlePay = () => {
-    // Reset errors
     setNameError(!name.trim() ? "Name is required." : "");
     setAddressError(!address.trim() ? "Address is required." : "");
     setEmailError(!email.trim() ? "Email is required." : "");
 
-    // Check if all fields are filled
     if (name.trim() && address.trim() && email.trim()) {
       onPay(email, name, address);
     }

@@ -20,22 +20,22 @@ interface OrdersProps {
 export const Orders: React.FC<OrdersProps> = ({ open, onClose }) => {
   const [orders, setOrders] = useState<Order[]>([]);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch("/api/orders");
-        const data: Order[] = await response.json();
-        setOrders(data);
-        console.log(orders);
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-      }
-    };
-    fetchOrders();
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch("/api/orders");
+      const data: Order[] = await response.json();
+      setOrders(data);
+      console.log(orders);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    }
+  };
 
-    const intervalId = setInterval(fetchOrders, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
+  useEffect(() => {
+    if (open) {
+      fetchOrders();
+    }
+  }, [open]);
 
   return (
     <Dialog open={open} onClose={onClose}>
