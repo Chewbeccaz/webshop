@@ -17,6 +17,7 @@ interface ICartContext {
   addToCart: (product: Product) => void;
   decreaseQuantity: (product: Product) => void;
   removeFromCart: (product: Product) => void;
+  clearCart: () => void;
 }
 
 const initialValues = {
@@ -24,6 +25,7 @@ const initialValues = {
   addToCart: () => {},
   decreaseQuantity: () => {},
   removeFromCart: () => {},
+  clearCart: () => {},
 };
 
 const CartContext = createContext<ICartContext>(initialValues);
@@ -38,6 +40,10 @@ const CartProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+
+  const clearCart = () => {
+    setCart([]);
+  };
 
   const addToCart = (product: Product) => {
     const clonedCart = [...cart];
@@ -74,7 +80,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, decreaseQuantity }}>
+      value={{ cart, addToCart, removeFromCart, decreaseQuantity, clearCart }}>
       {children}
     </CartContext.Provider>
   );
