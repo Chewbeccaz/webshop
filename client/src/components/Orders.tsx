@@ -8,6 +8,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import { Order } from "../models/Order";
 import { LineItem } from "../models/Order";
@@ -43,33 +44,37 @@ export const Orders: React.FC<OrdersProps> = ({ open, onClose }) => {
       <DialogContent>
         <List>
           {orders.map((order) => (
-            <ListItem key={order._id}>
-              <ListItemText
-                primary={`Order ID: ${order._id}`}
-                secondary={
-                  <>
-                    <div>Status: {order.status}</div>
-                    <div>Order Date: {order.orderDate}</div>
-                    <div>Total Price: {order.totalPrice}</div>
-                    <div>Payment ID: {order.paymentId || "N/A"}</div>
-                    <div>Customer: {order.customer}</div>
-                    <div>Products:</div>
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "auto",
-                      }}>
-                      {order.lineItems.map((item: LineItem) => (
-                        <div key={item._id}>
-                          <p>
-                            {item.linkedProduct.name} - Quantity: {item.amount}
-                          </p>
-                        </div>
-                      ))}
+            <ListItem
+              key={order._id}
+              style={{
+                border: "1px solid #ccc",
+                padding: "8px",
+                marginBottom: "8px",
+              }}>
+              <ListItemText primary={`Order ID: ${order._id}`} />
+              <div>
+                <Typography>Status: {order.status}</Typography>
+                <Typography>Order Date: {order.orderDate}</Typography>
+                <Typography>Total Price: {order.totalPrice}</Typography>
+                <Typography>Payment ID: {order.paymentId || "N/A"}</Typography>
+                <Typography>Customer: {order.customer}</Typography>
+                <Typography style={{ marginTop: "10px", fontWeight: "bold" }}>
+                  Products:
+                </Typography>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "auto",
+                  }}>
+                  {order.lineItems.map((item: LineItem) => (
+                    <div key={item._id}>
+                      <Typography>
+                        {item.linkedProduct.name} - Quantity: {item.amount}
+                      </Typography>
                     </div>
-                  </>
-                }
-              />
+                  ))}
+                </div>
+              </div>
             </ListItem>
           ))}
         </List>
