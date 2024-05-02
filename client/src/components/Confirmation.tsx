@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/confirmation.css";
+import { useCart } from "../context/CartContext";
 
 export const Confirmation = () => {
   const navigate = useNavigate();
+  const { clearCart } = useCart();
 
   const homeRedirect = () => {
+    clearCart();
     navigate("/");
   };
 
