@@ -1,6 +1,6 @@
 // PaymentModal.tsx
 import React, { useState } from "react";
-import { Box, Modal } from "@mui/material";
+import { Modal } from "@mui/material";
 
 interface PaymentModalProps {
   open: boolean;
